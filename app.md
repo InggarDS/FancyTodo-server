@@ -84,9 +84,10 @@
 	    "status" : "on progress",
 	    "due_date" : "12 dec 2020"
     }'
+
   ```
 
-  **Update a todo**
+**Update a todo**
 ----
   update a todo.
 
@@ -142,8 +143,8 @@
         "due_date":"10 apr 2020"
     }'
   ```
-  
-   **Update a todo**
+
+**Delete a todo**
 ----
   update a todo.
 
@@ -153,7 +154,7 @@
 
 * **Method:**
 
-  `PUT`
+  `DELETE`
   
 *  **URL Params**
 
