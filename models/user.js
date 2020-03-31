@@ -13,39 +13,82 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type : DataTypes.STRING,
       allowNull : false,
+      // unique : {
+      //   args : true,
+      //   msg : 'Username already in use!',
+      //   // fields : ['username']
+      // },
       validate : {
-        notNull : true,
-        notEmpty : true
-      }
+        notNull : {
+          args : true,
+          msg : 'username cannot be null',
+        },
+        notEmpty : {
+          args : true,
+          msg : 'username cannot be empty',
+        },
+        isUnique(value) {
+          return User.findOne( { where : {username : value}})
+          .then(result => {
+            if(result){
+              throw new Error('Username already in use !')
+            }
+          })
+        } 
+      },
     },
     password: {
       type : DataTypes.STRING,
       allowNull : false,
       validate : {
-        notNull : true,
-        notEmpty : true
+        notNull : {
+          args : true,
+          msg : 'password cannot be null',
+        },
+        notEmpty : {
+          args : true,
+          msg : 'password cannot be empty',
+        } 
       }
     },
     email: {
       type : DataTypes.STRING,
       allowNull : false,
       validate : {
-        notNull : true,
-        notEmpty : true,
-        isEmail : true
-      }
-    }
-  }, {
+        notNull : {
+          args : true,
+          msg : 'email cannot be null',
+        },
+        notEmpty : {
+          args : true,
+          msg : 'email cannot be empty',
+        },
+        isEmail : {
+          args : true,
+          msg : 'must be in email format'
+      }, 
+      isUnique(value) {
+       return User.findOne( { where : {email : value}})
+        .then(result => {
+          if(result){
+            throw new Error('Email address already in use !')
+          }
+        })
+      } 
+    },
+  }
+},{
     sequelize,
     hooks : {
       beforeCreate : (user, option) => {
         user.password = encryptPassword(user.password)
       }
     }
+  
   })
 
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Todo)
   };
   return User;
 };

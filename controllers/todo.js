@@ -2,30 +2,35 @@ const { Todo } = require('../models')
 
 class Controller {
 
-    static read(req, res){
+    static read(req, res, next){
 
-        Todo.findAll()
+        Todo.findAll({
+            where : { UserId : req.userId }
+        })
         .then((data) => {
             res.status(200).json({
                 todos : data
             })
         })
         .catch((err) => {
-            res.status(500).json({
-                error : 'Internal Server Error'
+
+            return  next( { 
+                name : 'Internal Server Error',
+                errors : [ { message : err }]
             })
+          
         })
     }
 
-    static create(req, res){
+    static create(req, res, next){
          
         let { title, description, status, due_date } = req.body
-
         Todo.create({
             title,
             description,
             status,
-            due_date
+            due_date,
+            UserId : req.userId
         })
         .then((data) => {
             res.status(201).json({
@@ -34,13 +39,14 @@ class Controller {
             })
         })
         .catch((err) => {
-            res.status(500).json(err)
-            
+           
+            return  next(err)
+          
         })
 
     }
 
-    static update(req, res){
+    static update(req, res, next){
 
         let { title, description, status, due_date } = req.body
 
@@ -53,7 +59,7 @@ class Controller {
             where : { id : +req.params.id }
         })
         .then((data) => {
-            
+
             Todo.findByPk(data[0])
             .then((dataUpdate) => {
 
@@ -63,23 +69,21 @@ class Controller {
                         todos : dataUpdate
                     })
                 } else {
-                    res.status(404).json({
-                        error : 'data not found'
-                    })
+                    return  next( { name : 'Not Found'} )
                 }
             })
             
         })
         .catch((err) => {
-            res.status(500).json(err)
+            
+            return  next(err)
+          
         })
-
-
 
     }
 
-    static delete(req, res){
-        
+    static delete(req, res, next){
+
         Todo.findByPk(+req.params.id)
         .then((data) => {
           
@@ -90,14 +94,16 @@ class Controller {
                 })
                 return data.destroy();
             } else {
-                res.status(404).json({
-                    error : 'data not found'
-                })
+               return  next( { name : 'Not Found'} )
             }
-           
         })
         .catch((err) => {
-            res.status(500).json(err)
+            
+            return  next( { 
+                name : 'Internal Server Error',
+                errors : [ { message : err }]
+            })
+          
         })
 
 

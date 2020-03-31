@@ -1,11 +1,11 @@
 const { User } = require('../models');
-const generateToken = require('../helpers/jwt');
+const { generateToken } = require('../helpers/jwt');
 const { decryptPassword } = require('../helpers/bcrypt')
 const { Op } = require('sequelize')
 
 class Controller {
 
-    static signup(req, res){
+    static signup(req, res, next){
         let { username, password, email } = req.body
 
         User.create({
@@ -31,12 +31,12 @@ class Controller {
             })
         })
         .catch((err) => {
-            res.status(500).json(err)
+            return  next(err)
         })
     
     }
 
-    static signin(req, res){
+    static signin(req, res, next){
 
         User.findOne({
             where : { 
@@ -75,20 +75,22 @@ class Controller {
                     })
                     
                 } else {
-                    res.status(400). json({
-                         message : 'invalid password/email'
+                    return next({
+                        name : 'bad request',
+                        errors : [{  message : 'invalid password/email' }]
                     })
                 }
             } else {
 
-                res.status(400). json({
-                    message : 'invalid password/email'
+                return next({
+                    name : 'bad request',
+                    errors : [{  message : 'invalid password/email' }]
                 })
 
             }
         })
         .catch((err) => {
-            res.status(500).json(err)
+            return  next(err)
         })
 
     }

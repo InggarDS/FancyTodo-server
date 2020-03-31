@@ -4,4 +4,8 @@ function generateToken(data){
     return jwt.sign(data, process.env.SECRET)
 }
 
-module.exports = generateToken;
+function decodeToken(token) {
+    return jwt.verify(token, process.env.SECRET)
+}
+
+module.exports = { generateToken, decodeToken };

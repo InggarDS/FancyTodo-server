@@ -10,16 +10,28 @@ module.exports = (sequelize, DataTypes) => {
       type : DataTypes.STRING,
       allowNull : false,
       validate : {
-        notNull : true,
-        notEmpty : true
+        notNull : {
+          args : true,
+          msg : 'title cannot be null'
+        },
+        notEmpty : {
+          args : true,
+          msg : 'title cannot be empty'
       }
-    },
+    }
+  },
     description: {
       type : DataTypes.STRING,
        allowNull : false,
       validate : {
-        notNull : true,
-        notEmpty : true
+        notNull : {
+          args : true,
+          msg : 'description cannot be null'
+        },
+        notEmpty : {
+          args : true,
+          msg : 'description cannot be empty'
+        }
       }
     },
     status: {
@@ -41,8 +53,12 @@ module.exports = (sequelize, DataTypes) => {
           let currentDate  = new Date();
           let date = new Date(value)
           if (currentDate === date || currentDate > date){
-            throw new Error('due_date not valid please check again')
+            throw new Error('due date minimum is current date')
           }
+        }, 
+        isDate : {
+          args : true,
+          msg : 'must date format'
         }
       }
     }
@@ -58,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
   })
 
   Todo.associate = function(models) {
-    // associations can be defined here
+    Todo.belongsTo(models.User)
   };
   return Todo;
 };
