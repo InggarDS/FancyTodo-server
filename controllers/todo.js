@@ -14,11 +14,22 @@ class Controller {
         })
         .catch((err) => {
 
-            return  next( { 
-                name : 'Internal Server Error',
-                errors : [ { message : err }]
-            })
+            return  next(err)
           
+        })
+    }
+
+    static findOne(req, res, next){
+        Todo.findOne({
+            where : { id : req.params.id }
+        })
+        .then((data) => {
+            return res.status(200).json({
+                todos : data
+            })
+        })
+        .catch(err => {
+            return  next(err)
         })
     }
 
@@ -33,7 +44,7 @@ class Controller {
             UserId : req.userId
         })
         .then((data) => {
-            res.status(201).json({
+           return res.status(201).json({
                 msg : 'sucessfully added',
                 todos : data
             })
@@ -49,8 +60,9 @@ class Controller {
     static update(req, res, next){
 
         let { title, description, status, due_date } = req.body
-
-        Todo.update({
+     
+        
+        return Todo.update({
             title : title,
             description : description,
             status : status,
@@ -59,12 +71,12 @@ class Controller {
             where : { id : +req.params.id }
         })
         .then((data) => {
-
-            Todo.findByPk(data[0])
+            
+            Todo.findByPk(req.params.id)
             .then((dataUpdate) => {
 
                 if(dataUpdate){
-                    res.status(200).json({
+                   return res.status(200).json({
                         msg : 'sucessfully update',
                         todos : dataUpdate
                     })
