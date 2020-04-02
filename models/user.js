@@ -1,6 +1,7 @@
 'use strict';
 
 const { encryptPassword } = require('../helpers/bcrypt')
+const {OAuth2Client} = require('google-auth-library')
 
 
 module.exports = (sequelize, DataTypes) => {
@@ -13,11 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     username: {
       type : DataTypes.STRING,
       allowNull : false,
-      // unique : {
-      //   args : true,
-      //   msg : 'Username already in use!',
-      //   // fields : ['username']
-      // },
       validate : {
         notNull : {
           args : true,

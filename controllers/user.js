@@ -2,6 +2,7 @@ const { User } = require('../models');
 const { generateToken } = require('../helpers/jwt');
 const { decryptPassword } = require('../helpers/bcrypt')
 const { Op } = require('sequelize')
+const {OAuth2Client} = require('google-auth-library')
 
 class Controller {
 
@@ -51,7 +52,6 @@ class Controller {
              }
         })
         .then((data) => {
-            console.log(data);
             
             if(data){
 
@@ -93,6 +93,77 @@ class Controller {
             return  next(err)
         })
 
+    }
+
+    static googleSign(req, res, next){
+        const client = new OAuth2Client(process.env.CLIENT_ID);
+        let email;
+        client.verifyIdToken({
+            idToken : req.body.id_token,
+            audience : process.env.CLIENT_ID
+        })
+        .then(result => {
+            email = result.payload.email
+
+            return User.findOne({
+                where : { email }
+            })
+            .then(data => {
+                if (data){
+                    
+                    let user = {
+                        id:data.id,
+                        username : data.name,
+                        email : data.email,
+                    }
+
+                    let token = generateToken(user)
+
+                    res.status(200).json({
+                        message : 'login success !!',
+                        'id' : user.id,
+                        'username' : user.username,
+                        'email' : user.email,
+                        'access_token' : token
+                    })
+                } else {
+                    let newUser = {
+                        username : result.payload.name,
+                        email : result.payload.email,
+                        password : 'Google'
+                    }
+
+                    return User.create(newUser)
+                    .then(data => {
+
+                        let user =  {
+                            id : data.id,
+                            username : data.username,
+                            email : data.email
+                        }
+            
+                        let token = generateToken(user);
+            
+                        res.status(201).json({
+                            message : 'success add user !!',
+                            'id' : data.id,
+                            'username' : data.username,
+                            'email' : data.email,
+                            'access_token' : token
+                        })
+
+                    })
+                    .catch(err => {
+                        next(err)
+                    })
+
+                }
+
+
+
+            })
+            
+        })
     }
 
 }
