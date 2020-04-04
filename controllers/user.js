@@ -2,9 +2,29 @@ const { User } = require('../models');
 const { generateToken } = require('../helpers/jwt');
 const { decryptPassword } = require('../helpers/bcrypt')
 const { Op } = require('sequelize')
-const {OAuth2Client} = require('google-auth-library')
+const { OAuth2Client } = require('google-auth-library')
 
 class Controller {
+
+    static read(req, res, next){
+
+        User.findAll()
+        .then((data) => {
+           
+                return res.status(200).json({
+                        
+                    users : data,
+                          
+                })
+          
+            
+        })
+        .catch((err) => {
+
+            return  next(err)
+          
+        })
+    }
 
     static signup(req, res, next){
         let { username, password, email } = req.body
@@ -34,7 +54,6 @@ class Controller {
         .catch((err) => {
             return  next(err)
         })
-    
     }
 
     static signin(req, res, next){
@@ -53,7 +72,7 @@ class Controller {
         })
         .then((data) => {
             
-            if(data){
+            if (data){
 
                 let compare = decryptPassword(req.body.password, data.password)
                 if (compare){
@@ -65,7 +84,7 @@ class Controller {
                     }
         
                     let token = generateToken(user);
-        
+                    
                     res.status(201).json({
                         message : 'login success !!',
                         'id' : data.id,
@@ -98,7 +117,9 @@ class Controller {
     static googleSign(req, res, next){
         const client = new OAuth2Client(process.env.CLIENT_ID);
         let email;
-        client.verifyIdToken({
+
+        client.verifyIdToken ({
+            
             idToken : req.body.id_token,
             audience : process.env.CLIENT_ID
         })
@@ -156,13 +177,8 @@ class Controller {
                     .catch(err => {
                         next(err)
                     })
-
                 }
-
-
-
-            })
-            
+            })   
         })
     }
 

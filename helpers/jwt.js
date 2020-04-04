@@ -5,6 +5,8 @@ function generateToken(data){
 }
 
 function decodeToken(token) {
+
+    
     return jwt.verify(token, process.env.SECRET)
 }
 

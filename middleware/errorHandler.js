@@ -12,7 +12,6 @@ function errorHandler (err, req, res, next){
             errors : errors 
         })
     } else if (err.name == "Unauthorized"){
-
         res.status(404).json({
             type : 'bad request',
             errors : err.errors

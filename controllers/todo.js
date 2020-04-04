@@ -1,4 +1,4 @@
-const { Todo } = require('../models')
+const { Todo, User } = require('../models')
 
 class Controller {
 
@@ -8,9 +8,18 @@ class Controller {
             where : { UserId : req.userId }
         })
         .then((data) => {
-            res.status(200).json({
-                todos : data
+            User.findByPk(req.userId)
+            .then( user => {
+
+                return res.status(200).json({
+                        todos : data,
+                        username : user.username        
+                })
             })
+            .catch( err => {
+                return next(err)
+            })
+            
         })
         .catch((err) => {
 
@@ -68,23 +77,21 @@ class Controller {
             status : status,
             due_date : due_date
         }, {
-            where : { id : +req.params.id }
+            where : { id : +req.params.id },
+            returning : true
         })
         .then((data) => {
-            
-            Todo.findByPk(req.params.id)
-            .then((dataUpdate) => {
-
-                if(dataUpdate){
+                        
+              if(data){
                    return res.status(200).json({
                         msg : 'sucessfully update',
-                        todos : dataUpdate
+                        todos : data[1]
                     })
+
                 } else {
+                    
                     return  next( { name : 'Not Found'} )
                 }
-            })
-            
         })
         .catch((err) => {
             

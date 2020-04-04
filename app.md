@@ -12,6 +12,9 @@
 
 * **Success Response:**
 
+  * **Request Headers:**
+  `{ access_token : YOUR_TOKEN }`
+
   * **Code:** 200 <br />
     **Content:** `{ id : 4, title: "Task 1", description : "add feature in Task 1", status : "on Progress", due_date : "2020-04-12T00:00:00.000Z" } `
  
@@ -36,7 +39,10 @@
 * **Method:**
 
   `POST`
-  
+
+* **Request Headers:**
+  `{ access_token : YOUR_TOKEN }`
+
 * **Request Body:**
 ```javascript
    {
@@ -106,6 +112,20 @@
    `id=[integer]`
 
 
+
+* **Request Headers:**
+  `{ access_token : YOUR_TOKEN }`
+
+* **Request Body:**
+```javascript
+   {
+	"title" : "task 8",
+	"description" : "test post",
+	"status" : "on progress",
+	"due_date" : "12 dec 2020"
+   }
+```
+
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -162,6 +182,9 @@
  
    `id=[integer]`
 
+* **Request Headers:**
+  `{ access_token : YOUR_TOKEN }`
+
 * **Success Response:**
 
   * **Code:** 200 <br />
@@ -193,3 +216,104 @@
     curl --location --request DELETE 'http://localhost:3000/todos/1'
   ```
   
+
+**Get a holiday**
+----
+  get day or holyday base on current date.
+
+* **URL**
+
+  /api/holiday
+
+* **Method:**
+
+  `GET`
+  
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```javascript
+    {
+       {
+          "day": "Saturday"
+      }
+    }
+    ```
+
+
+* **Sample Call:**
+
+  ```javascript
+   curl --location --request GET 'http://localhost:3000/api/holiday''
+  ```
+
+  **Get quote**
+----
+  get random quote every day.
+
+* **URL**
+
+  /api/quote
+
+* **Method:**
+
+  `GET`
+  
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```javascript
+    {
+        {
+          "content": "All perceiving is also thinking, all reasoning is also intuition, all observation is also invention.",
+          "author": "Rudolf Arnheim"
+        }
+    }
+    ```
+
+* **Sample Call:**
+
+  ```javascript
+   curl --location --request GET 'http://localhost:3000/api/quote''
+  ```
+
+  * **Sample Call:**
+
+  ```javascript
+   curl --location --request GET 'http://localhost:3000/api/holiday''
+  ```
+
+  **Get image**
+----
+  get random image every day.
+
+* **URL**
+
+  /api/wallpaper
+
+* **Method:**
+
+  `GET`
+  
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:** 
+    ```javascript
+    {
+      {
+        "url": "https://images.unsplash.com/photo-1569176106333-acbfe0bacabb?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max&ixid=eyJhcHBfaWQiOjEyNDY1NX0",
+        "creator": "Stephen Walker"
+      }
+    }
+    ```
+
+* **Sample Call:**
+
+  ```javascript
+   curl --location --request GET 'http://localhost:3000/api/wallpaper''
+  ```
