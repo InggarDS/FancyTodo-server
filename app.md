@@ -249,7 +249,7 @@
    curl --location --request GET 'http://localhost:3000/api/holiday''
   ```
 
-  **Get quote**
+**Get quote**
 ----
   get random quote every day.
 
@@ -287,7 +287,7 @@
    curl --location --request GET 'http://localhost:3000/api/holiday''
   ```
 
-  **Get image**
+**Get image**
 ----
   get random image every day.
 
