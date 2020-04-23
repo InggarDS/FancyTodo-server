@@ -1,3 +1,90 @@
+**Sign up user**
+----
+  create new user
+
+* **URL**
+
+  /signup
+
+* **Method:**
+
+  `POST`
+
+  * **Request Body:**
+```javascript
+  {
+	"username" : "carol",
+	"password" :"1234",
+	"email" : "baru@gmail.com"
+  }
+
+```
+
+* **Success Response:**
+
+  * **Code:** 201 <br />
+    **Content:** `{ error : "Internal Server Error" }
+    `{`
+      `"message": "success add user !!",`
+      `"id": 36,`
+      `"username": "carol",`
+      `"email": "baru@gmail.com",`
+      `"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.`
+    `}`
+    
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ error : "Internal Server Error" }`
+
+* **Sample Call:**
+
+    `curl --location --request POST 'http://localhost:3000/signup'`
+
+
+
+**Signin user**
+----
+  Login user
+
+* **URL**
+
+  /signin
+
+* **Method:**
+
+  `POST`
+
+  * **Request Body:**
+```javascript
+  {
+	"username" : "carol",
+	"password" :"1234",
+  }
+
+```
+* **Success Response:**
+
+  * **Code:** 209 <br />
+    **Content:** `{ error : "Internal Server Error" }
+    `{`
+      `"message": "login success !!",`
+      `"id": 36,`
+      `"username": "carol",`
+      `"email": "baru@gmail.com",`
+      `"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.`
+    `}`
+    
+* **Error Response:**
+
+  * **Code:** 500 INTERNAL SERVER ERROR <br />
+    **Content:** `{ error : "Internal Server Error" }`
+
+* **Sample Call:**
+
+    `curl --location --request POST 'http://localhost:3000/signin'`
+
+
 **Get the todos list**
 ----
   Returns all json data about todo .
@@ -110,8 +197,6 @@
    **Required:**
  
    `id=[integer]`
-
-
 
 * **Request Headers:**
   `{ access_token : YOUR_TOKEN }`

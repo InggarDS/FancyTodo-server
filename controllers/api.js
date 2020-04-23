@@ -41,9 +41,9 @@ class Controller {
         let day = date.getDay();
         let month = date.getMonth();
         let year = date.getFullYear();
-        let days = ['Sunday', 'Tuesday', 'Wednesday','Thursday','Friday', 'Saturday', 'Monday'];        
-        let nameOfDay = days[day-1]
-
+        let days = ['Sunday', 'Monday','Tuesday', 'Wednesday','Thursday','Friday', 'Saturday'];        
+        let nameOfDay = days[day]
+        
         axios.get(`https://calendarific.com/api/v2/holidays?&api_key=${process.env.API_KEY}&country=${req.params.country}&year=${year}&month=${month + 1}&day=${day}`)
         .then(result => {
             let { data } = result
@@ -56,7 +56,6 @@ class Controller {
                     day : data.response.holidays[0].name
                  })
             }
-            
         })
         .catch(err => {
             return next(err)
